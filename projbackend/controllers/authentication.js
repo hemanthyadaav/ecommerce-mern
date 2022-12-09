@@ -44,9 +44,9 @@ exports.signin = (req, res) => {
       email,
     },
     (err, user) => {
-      if (err) {
+      if (err || !user) {
         return res.status(400).json({
-          error: "USER email does not exists!",
+          error: "user email does not exists!",
         });
       }
       if (!user.authenticate(password)) {
@@ -77,7 +77,44 @@ exports.signin = (req, res) => {
 };
 
 exports.signout = (req, res) => {
+  res.clearCookie("token");
   return res.json({
     message: "User Signout!",
   });
 };
+
+//for protected routes
+exports.isSignedIn = expressjwt({
+  secret: process.env.SECRET,
+  algorithms: ["HS256"],
+  userProperty: "auth"
+});
+
+
+//custom middlewares 
+exports.isAuthorized = (req, res, next) => {
+
+    //profile will be coming up the frontend when the user would be created
+    let checker = req.profile && req.auth && req.profile._id === req.auth._id; 
+
+    if(!checker){
+        return res.status(403).json({
+            error: "You are not authorized to do this operation, please make sure you have proper rights to do so...!"
+        })
+    }
+
+    next(); 
+}
+
+exports.isAdmin = (req, res, next) => {
+
+    //again, profile is coming up from the frontend when the user would be created
+    if(req.profile.role !== 1)
+    {
+        return res.status(403).json({
+            error: "You are not an ADMIN!!!"
+        })
+    }
+
+    next(); 
+}

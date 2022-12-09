@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { signout, signup, signin } = require("../controllers/authentication");
+const { signout, signup, signin, isSignedIn } = require("../controllers/authentication");
 const { check, validationResult } = require("express-validator");
 
 //actual routes
@@ -18,15 +18,19 @@ router.post(
 
 router.post(
   "/signin",
-  check("email")
-      .isEmail()
-      .withMessage("Email should be valid!"),
+  check("email").isEmail().withMessage("Email should be valid!"),
   check("password")
-      .isLength({ min: 5 })
-      .withMessage("Password must be at least 5 chars long!"),
+    .isLength({ min: 5 })
+    .withMessage("Password must be at least 5 chars long!"),
   signin
 );
 
 router.get("/signout", signout);
+
+router.get("/protected", isSignedIn, (req, res) => {
+  res.status(200).json({
+    message: "This is a protected Route!"
+  })
+});
 
 module.exports = router;
