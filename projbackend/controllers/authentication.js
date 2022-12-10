@@ -1,6 +1,5 @@
 const User = require("../models/user");
 const { body, validationResult } = require("express-validator");
-const user = require("../models/user");
 var jwt = require("jsonwebtoken");
 var { expressjwt } = require("express-jwt");
 require("dotenv").config();
@@ -83,6 +82,7 @@ exports.signout = (req, res) => {
   });
 };
 
+
 //for protected routes
 exports.isSignedIn = expressjwt({
   secret: process.env.SECRET,
@@ -95,7 +95,7 @@ exports.isSignedIn = expressjwt({
 exports.isAuthorized = (req, res, next) => {
 
     //profile will be coming up the frontend when the user would be created
-    let checker = req.profile && req.auth && req.profile._id === req.auth._id; 
+    let checker = req.profile && req.auth && req.profile._id == req.auth._id; 
 
     if(!checker){
         return res.status(403).json({
