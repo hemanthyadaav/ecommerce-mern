@@ -6,6 +6,8 @@ var cors = require('cors')
 const express = require("express");
 const authRoutes = require("./routes/authentication")
 const userRoutes = require("./routes/user")
+const categoryRoutes = require("./routes/category")
+
 
 const app = express();
 
@@ -26,6 +28,7 @@ app.use(cors());
 //my routes
 app.use("/api", authRoutes)
 app.use("/api", userRoutes)
+app.use("/api", categoryRoutes)
 
 
 //start a server
