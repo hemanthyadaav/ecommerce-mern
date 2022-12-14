@@ -5,8 +5,8 @@ import Base from "./Base";
 
 const Home = () => {
   return (
-    <Base>
-      <h1 className="text-white">{API}</h1>
+    <Base title="HomePage" description="This is the description of the page">
+      <h1 className="text-white text-center display-6">{API}</h1>
     </Base>
   );
 };
