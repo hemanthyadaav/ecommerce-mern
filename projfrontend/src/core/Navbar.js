@@ -23,6 +23,7 @@ import { ADASHBOARD } from "../links";
 import { DASHBOARD } from "../links";
 import { CART } from "../links";
 import { HOME } from "../links";
+import { theme } from "../theme";
 
 const drawerWidth = 240;
 const navItems = [
@@ -61,7 +62,7 @@ function Navbar(props) {
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
-      <Typography variant="h6" sx={{ my: 2 }}>
+      <Typography variant="h6" sx={{ my: 2}}>
         {APP_NAME}
       </Typography>
       <Divider />
@@ -89,7 +90,7 @@ function Navbar(props) {
       <AppBar component="nav" sx={{ background: "#35BDD0" }}>
         <Toolbar>
           <IconButton
-            color="inherit"
+            // color="in"
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
@@ -100,7 +101,7 @@ function Navbar(props) {
           <Typography
             variant="h6"
             component="div"
-            sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
+            sx={{ flexGrow: 1, display: { xs: "none", sm: "block" },  color: "white" }}
           >
             {APP_NAME}
           </Typography>
@@ -131,6 +132,8 @@ function Navbar(props) {
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
               width: drawerWidth,
+              backgroundColor: theme.palette.primary.main, 
+              color: "white"
             },
           }}
         >
