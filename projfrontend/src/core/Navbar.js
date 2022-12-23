@@ -90,7 +90,6 @@ function Navbar(props) {
       <AppBar component="nav" sx={{ background: "#35BDD0" }}>
         <Toolbar>
           <IconButton
-            // color="in"
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}

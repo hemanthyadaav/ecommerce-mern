@@ -1,4 +1,3 @@
-import { useTheme } from "@emotion/react";
 import {
   Button,
   Container,
@@ -10,7 +9,6 @@ import {
 import React from "react";
 
 export default function Signin() {
-  const theme = useTheme();
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />

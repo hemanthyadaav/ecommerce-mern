@@ -4,11 +4,52 @@ import {
   CssBaseline,
   Grid,
   TextField,
-  Typography
+  Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
+import { signup } from "../auth/helper";
+import { ToastContainer, toast } from "react-toastify";
 
 export default function SignUp() {
+  const [values, setValues] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    error: "",
+    success: false,
+  });
+
+  const { firstName, lastName, email, password, error, success } = values;
+
+  const handleChange = (name) => (event) => {
+    setValues({ ...values, error: false, [name]: event.target.value });
+  };
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    setValues({ ...values, error: false });
+    return signup({ firstName, lastName, email, password })
+      .then((data) => {
+        if (data?.error) {
+          setValues({ ...values, error: data.error, success: false });
+          toast.error(data.error);
+        } else {
+          setValues({
+            ...values,
+            firstName: "",
+            lastName: "",
+            email: "",
+            password: "",
+            error: "",
+            success: true,
+          });
+          toast.success("SignUp Successfull!");
+        }
+      })
+      .catch((err) => console.log("Error on Sign Up!", err));
+  };
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -25,13 +66,28 @@ export default function SignUp() {
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
-                autoComplete="name"
-                name="name"
+                autoComplete="firstName"
+                name="firstName"
                 variant="outlined"
                 required
                 fullWidth
-                label="Name"
+                label="First Name"
                 autoFocus
+                onChange={handleChange("firstName")}
+                value={firstName}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                autoComplete="lastName"
+                name="lastName"
+                variant="outlined"
+                required
+                fullWidth
+                label="Last Name"
+                autoFocus
+                onChange={handleChange("lastName")}
+                value={lastName}
               />
             </Grid>
             <Grid item xs={12}>
@@ -43,6 +99,8 @@ export default function SignUp() {
                 label="Email Address"
                 name="email"
                 autoComplete="email"
+                onChange={handleChange("email")}
+                value={email}
               />
             </Grid>
             <Grid item xs={12}>
@@ -55,6 +113,8 @@ export default function SignUp() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                onChange={handleChange("password")}
+                value={password}
               />
             </Grid>
           </Grid>
@@ -63,10 +123,13 @@ export default function SignUp() {
             type="submit"
             fullWidth
             variant="contained"
+            onClick={onSubmit}
           >
             Sign Up
           </Button>
         </form>
+        <Typography>{JSON.stringify(values)}</Typography>
+        <ToastContainer />
       </div>
     </Container>
   );
