@@ -15,8 +15,8 @@ import { authenticate, isAuthenticated, signin } from "../auth/helper";
 
 export default function Signin() {
   const [values, setValues] = useState({
-    email: "a@gmail.com",
-    password: "12345",
+    email: "",
+    password: "",
     error: false,
     isLoading: false,
     didRedirect: false,
@@ -24,7 +24,7 @@ export default function Signin() {
   let navigate = useNavigate();
 
   const { email, password, error, isLoading, didRedirect } = values;
-  const { user } = isAuthenticated();
+  // const { user } = isAuthenticated();
 
   const handleChange = (name) => (event) => {
     setValues({ ...values, error: false, [name]: event.target.value });
