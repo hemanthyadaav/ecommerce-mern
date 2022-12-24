@@ -1,50 +1,53 @@
-const mongoose = require("mongoose")
-const { v4: uuidv4 } = require('uuid');
-const crypto = require('node:crypto');
+const mongoose = require("mongoose");
+const { v4: uuidv4 } = require("uuid");
+// const crypto = require('node:crypto');
+var CryptoJS = require("crypto-js");
+
 const { Schema } = mongoose;
 
+const userSchema = new Schema(
+  {
+    firstName: {
+      type: String,
+      required: true,
+      trim: true,
+    },
 
-const userSchema = new Schema({
-  firstName: {
-    type: String,
-    required: true,
-    trim: true,
-  },
+    lastName: {
+      type: String,
+      trim: true,
+    },
 
-  lastName: {
-    type: String,
-    trim: true,
-  },
+    email: {
+      type: String,
+      trim: true,
+      required: true,
+      unique: true,
+    },
 
-  email: {
-    type: String,
-    trim: true,
-    required: true,
-    unique: true,
-  },
+    userInfo: {
+      type: String,
+      trim: true,
+    },
 
-  userInfo: {
-    type: String,
-    trim: true,
-  },
+    encry_password: {
+      type: String,
+      required: true,
+    },
 
-  encry_password: {
-    type: String,
-    required: true,
-  },
+    salt: String,
+    role: {
+      type: Number,
+      default: 0,
+    },
 
-  salt: String,
-  role: {
-    type: Number,
-    default: 0,
+    purchases: {
+      type: Array,
+      default: [],
+    },
   },
-
-  purchases: {
-    type: Array,
-    default: [],
-  },
-  
-}, {timestamps: true});
+  { timestamps: true }
+);
 
 userSchema
   .virtual("password")
@@ -59,15 +62,18 @@ userSchema
 
 userSchema.methods = {
   authenticate: function (plainPassword) {
-    return this.securePassword(plainPassword) === this.encry_password;
+    return this.getOriginalPassword(this.encry_password) === plainPassword;
+  },
+
+  getOriginalPassword: function (encry_password) {
+    var bytes = CryptoJS.AES.decrypt(encry_password, this.salt);
+    return bytes.toString(CryptoJS.enc.Utf8);
   },
 
   securePassword: function (plainPassword) {
     if (!plainPassword) return "";
     try {
-      return crypto.createHmac("sha256", this.salt)
-        .update(plainPassword)
-        .digest("hex");
+      return CryptoJS.AES.encrypt(plainPassword, this.salt).toString();
     } catch (err) {
       return "Empty password cannot be stored!";
     }
