@@ -7,8 +7,10 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
+import { useNavigate } from "react-router";
+import { toast, ToastContainer } from "react-toastify";
 import { signup } from "../auth/helper";
-import { ToastContainer, toast } from "react-toastify";
+import { SIGNIN } from "../links";
 
 export default function SignUp() {
   const [values, setValues] = useState({
@@ -19,6 +21,8 @@ export default function SignUp() {
     error: "",
     success: false,
   });
+
+  const navigate = useNavigate();
 
   const { firstName, lastName, email, password, error, success } = values;
 
@@ -45,6 +49,7 @@ export default function SignUp() {
             success: true,
           });
           toast.success("SignUp Successfull!");
+          return navigate(SIGNIN);
         }
       })
       .catch((err) => console.log("Error on Sign Up!", err));
@@ -128,7 +133,6 @@ export default function SignUp() {
             Sign Up
           </Button>
         </form>
-        <Typography>{JSON.stringify(values)}</Typography>
         <ToastContainer />
       </div>
     </Container>
