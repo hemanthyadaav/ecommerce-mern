@@ -48,8 +48,8 @@ export default function SignUp() {
             error: "",
             success: true,
           });
-          toast.success("SignUp Successfull!");
-          return navigate(SIGNIN);
+          return toast.success("SignUp Successfull!");
+          // return navigate(SIGNIN);
         }
       })
       .catch((err) => console.log("Error on Sign Up!", err));
