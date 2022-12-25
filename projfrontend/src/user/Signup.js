@@ -90,7 +90,6 @@ export default function SignUp() {
                 required
                 fullWidth
                 label="Last Name"
-                autoFocus
                 onChange={handleChange("lastName")}
                 value={lastName}
               />
