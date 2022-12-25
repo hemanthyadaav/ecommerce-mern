@@ -62,6 +62,7 @@ userSchema
 
 userSchema.methods = {
   authenticate: function (plainPassword) {
+    // console.log(this.getOriginalPassword(this.encry_password))
     return this.getOriginalPassword(this.encry_password) === plainPassword;
   },
 
