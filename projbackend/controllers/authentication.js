@@ -12,32 +12,34 @@ exports.signup = (req, res) => {
       error: errors.array()[0].msg,
     });
   }
-
+  const { email } = req.body;
   const user = new User(req.body);
   User.findOne(
     {
       email,
     },
     (error, user) => {
-      if (user) {
+      if (error || user) {
         return res.status(400).json({
           error: "User email exists!",
+        });
+      } else {
+        user.save((error, user) => {
+          if (error) {
+            console.log(error);
+            return res.status(400).json({
+              error: "Not able to save user in DB",
+            });
+          }
+          return res.json({
+            name: user.firstName + " " + user.lastName,
+            email: user.email,
+            id: user._id,
+          });
         });
       }
     }
   );
-  user.save((error, user) => {
-    if (error) {
-      return res.status(400).json({
-        error: "Not able to save user in DB",
-      });
-    }
-    return res.json({
-      name: user.firstName + " " + user.lastName,
-      email: user.email,
-      id: user._id,
-    });
-  });
 };
 
 exports.signin = (req, res) => {
