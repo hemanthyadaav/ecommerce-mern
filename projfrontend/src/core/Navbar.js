@@ -14,27 +14,15 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
 import * as React from "react";
-import { APP_NAME } from "../backend";
+import { Fragment } from "react";
 import { useNavigate } from "react-router-dom";
-import { SIGNUP } from "../links";
-import { SIGNIN } from "../links";
-import { SIGNOUT } from "../links";
-import { ADASHBOARD } from "../links";
-import { DASHBOARD } from "../links";
-import { CART } from "../links";
-import { HOME } from "../links";
+import { isAuthenticated, signout } from "../auth/helper";
+import { APP_NAME } from "../backend";
+import { ADASHBOARD, CART, DASHBOARD, HOME, SIGNIN, SIGNUP } from "../links";
 import { theme } from "../theme";
 
 const drawerWidth = 240;
-const navItems = [
-  "Home",
-  "Cart",
-  "Dashboard",
-  "A. Dashboard",
-  "Signup",
-  "SignIn",
-  "SignOut",
-];
+const navItems = ["Home", "Cart", "Dashboard"];
 
 const links = {
   Home: HOME,
@@ -43,7 +31,6 @@ const links = {
   "A. Dashboard": ADASHBOARD,
   Signup: SIGNUP,
   SignIn: SIGNIN,
-  SignOut: SIGNOUT,
 };
 
 function Navbar(props) {
@@ -60,9 +47,15 @@ function Navbar(props) {
     setMobileOpen((prevState) => !prevState);
   };
 
+  const handleSignout = () => {
+    signout(() => {
+      return navigate(SIGNIN);
+    });
+  };
+
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
-      <Typography variant="h6" sx={{ my: 2}}>
+      <Typography variant="h6" sx={{ my: 2 }}>
         {APP_NAME}
       </Typography>
       <Divider />
@@ -77,6 +70,47 @@ function Navbar(props) {
             </ListItemButton>
           </ListItem>
         ))}
+        {isAuthenticated() && isAuthenticated().user.role === 1 && (
+          <ListItem disablePadding>
+            <ListItemButton
+              sx={{ textAlign: "center" }}
+              onClick={() => handleClick(links["A. Dashboard"])}
+            >
+              <ListItemText primary={"A. Dashboard"} />
+            </ListItemButton>
+          </ListItem>
+        )}
+
+        {!isAuthenticated() && (
+          <Fragment>
+            <ListItem disablePadding>
+              <ListItemButton
+                sx={{ textAlign: "center" }}
+                onClick={() => handleClick(links["Signup"])}
+              >
+                <ListItemText primary={"Signup"} />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton
+                sx={{ textAlign: "center" }}
+                onClick={() => handleClick(links["SignIn"])}
+              >
+                <ListItemText primary={"SignIn"} />
+              </ListItemButton>
+            </ListItem>
+          </Fragment>
+        )}
+        {isAuthenticated() && (
+          <ListItem disablePadding>
+            <ListItemButton
+              sx={{ textAlign: "center" }}
+              onClick={handleSignout}
+            >
+              <ListItemText primary={"SignOut"} />
+            </ListItemButton>
+          </ListItem>
+        )}
       </List>
     </Box>
   );
@@ -90,7 +124,6 @@ function Navbar(props) {
       <AppBar component="nav" sx={{ background: "#35BDD0" }}>
         <Toolbar>
           <IconButton
-            // color="in"
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
@@ -101,7 +134,11 @@ function Navbar(props) {
           <Typography
             variant="h6"
             component="div"
-            sx={{ flexGrow: 1, display: { xs: "none", sm: "block" },  color: "white" }}
+            sx={{
+              flexGrow: 1,
+              display: { xs: "none", sm: "block" },
+              color: "white",
+            }}
           >
             {APP_NAME}
           </Typography>
@@ -115,6 +152,35 @@ function Navbar(props) {
                 {item}
               </Button>
             ))}
+            {isAuthenticated() && isAuthenticated().user.role === 1 && (
+              <Button
+                sx={{ color: "white" }}
+                onClick={() => handleClick(links["A. Dashboard"])}
+              >
+                A. Dashboard
+              </Button>
+            )}
+            {!isAuthenticated() && (
+              <Fragment>
+                <Button
+                  sx={{ color: "white" }}
+                  onClick={() => handleClick(links["Signup"])}
+                >
+                  Signup
+                </Button>
+                <Button
+                  sx={{ color: "white" }}
+                  onClick={() => handleClick(links["SignIn"])}
+                >
+                  SignIn
+                </Button>
+              </Fragment>
+            )}
+            {isAuthenticated() && (
+              <Button sx={{ color: "white" }} onClick={handleSignout}>
+                SignOut
+              </Button>
+            )}
           </Box>
         </Toolbar>
       </AppBar>
@@ -132,8 +198,8 @@ function Navbar(props) {
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
               width: drawerWidth,
-              backgroundColor: theme.palette.primary.main, 
-              color: "white"
+              backgroundColor: theme.palette.primary.main,
+              color: "white",
             },
           }}
         >
