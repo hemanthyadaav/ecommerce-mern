@@ -13,17 +13,19 @@ exports.signup = (req, res) => {
     });
   }
   const { email } = req.body;
-  const user = new User(req.body);
+
   User.findOne(
     {
       email,
     },
     (error, user) => {
-      if (error || user) {
+      if (user) {
+        console.log(error)
         return res.status(400).json({
           error: "User email exists!",
         });
       } else {
+        const user = new User(req.body);
         user.save((error, user) => {
           if (error) {
             console.log(error);
@@ -57,9 +59,9 @@ exports.signin = (req, res) => {
       email,
     },
     (error, user) => {
-      if (error || !user) {
+      if (!user) {
         return res.status(400).json({
-          error: "user email does not exists!",
+          error: "User email does not exists!",
         });
       }
       if (!user.authenticate(password)) {

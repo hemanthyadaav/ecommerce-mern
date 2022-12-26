@@ -174,7 +174,6 @@ exports.updateInventory = (req, res, next) => {
         error: "Bulk Write Failed!",
       });
     }
-
     next();
   });
 };
