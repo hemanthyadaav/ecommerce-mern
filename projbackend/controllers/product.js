@@ -8,8 +8,8 @@ exports.createProduct = (req, res) => {
   let form = new formidable.IncomingForm();
   form.keepExtensions = true;
 
-  form.parse(req, (err, fields, file) => {
-    if (err) {
+  form.parse(req, (error, fields, file) => {
+    if (error) {
       return res.status(400).json({
         error: "Problem with Image",
       });
@@ -38,8 +38,8 @@ exports.createProduct = (req, res) => {
       }
     }
 
-    product.save((err, product) => {
-      if (err) {
+    product.save((error, product) => {
+      if (error) {
         return res.status(400).json({
           error: "Saving T-Shirt in DB failed!",
         });
@@ -52,8 +52,8 @@ exports.createProduct = (req, res) => {
 exports.getProductById = (req, res, next, id) => {
   Product.findById(id)
     .populate("category")
-    .exec((err, product) => {
-      if (err || !product) {
+    .exec((error, product) => {
+      if (error || !product) {
         return res.status(400).json({
           error: "Not able to find product in DB!",
         });
@@ -82,8 +82,8 @@ exports.updateProduct = (req, res) => {
   let form = new formidable.IncomingForm();
   form.keepExtensions = true;
 
-  form.parse(req, (err, fields, file) => {
-    if (err) {
+  form.parse(req, (error, fields, file) => {
+    if (error) {
       return res.status(400).json({
         error: "Problem with Image",
       });
@@ -106,8 +106,8 @@ exports.updateProduct = (req, res) => {
       }
     }
 
-    product.save((err, updatedProduct) => {
-      if (err) {
+    product.save((error, updatedProduct) => {
+      if (error) {
         return res.status(400).json({
           error: "Updating T-Shirt in DB failed!",
         });
@@ -119,8 +119,8 @@ exports.updateProduct = (req, res) => {
 
 exports.deleteProduct = (req, res) => {
   let product = req.product;
-  product.remove((err, deletedProduct) => {
-    if (err) {
+  product.remove((error, deletedProduct) => {
+    if (error) {
       return res.status(400).json({
         error: "Not able to delete the product!",
       });
@@ -141,8 +141,8 @@ exports.getAllProducts = (req, res) => {
     .populate("category")
     .limit(limit)
     .sort([[sortBy, sortType]])
-    .exec((err, allProducts) => {
-      if (err) {
+    .exec((error, allProducts) => {
+      if (error) {
         return res.status(400).json({
           error: "Unable to get products from DB!",
         });
@@ -168,8 +168,8 @@ exports.updateInventory = (req, res, next) => {
     };
   });
 
-  Product.bulkWrite(bulkOperations, {}, (err, bulkOperations) => {
-    if (err) {
+  Product.bulkWrite(bulkOperations, {}, (error, bulkOperations) => {
+    if (error) {
       return res.status(400).json({
         error: "Bulk Write Failed!",
       });
@@ -180,8 +180,8 @@ exports.updateInventory = (req, res, next) => {
 };
 
 exports.getAllUniqueCategories = (req, res) => {
-  Product.distinct("category", {}, (err, distinctCategories) => {
-    if (err) {
+  Product.distinct("category", {}, (error, distinctCategories) => {
+    if (error) {
       return res.status(400).json({
         error: "Unable to get all Categories!",
       });

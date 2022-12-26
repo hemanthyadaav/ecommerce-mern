@@ -3,8 +3,8 @@ const { Order, ProductCart } = require("../models/order");
 exports.getOrderById = (req, res, next, id) => {
   Order.findById(id)
     .populate("products.product", "name price")
-    .exec((err, order) => {
-      if (err) {
+    .exec((error, order) => {
+      if (error) {
         return res.status(400).json({
           error: "No orders found in DB!",
         });
@@ -18,8 +18,8 @@ exports.createOrder = (req, res) => {
   req.body.order.user = req.profile;
   const order = new Order(req.body.order);
 
-  order.save((err, orderInDB) => {
-    if (err) {
+  order.save((error, orderInDB) => {
+    if (error) {
       return res.status(400).json({
         error: "Failed to save order in DB!",
       });
@@ -32,8 +32,8 @@ exports.createOrder = (req, res) => {
 exports.getAllOrders = (req, res) => {
   Order.find()
     .populate("user", "_id firstName email")
-    .exec((err, orders) => {
-      if (err) {
+    .exec((error, orders) => {
+      if (error) {
         return res.status(400).json({
           error: "No Orders found in DB!",
         });
@@ -56,8 +56,8 @@ exports.updateStatus = (req, res) => {
         status: req.body.status,
       },
     },
-    (err, order) => {
-      if (err) {
+    (error, order) => {
+      if (error) {
         return res.status(400).json({
           error: "Not able to update Order!",
         });

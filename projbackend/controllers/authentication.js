@@ -14,10 +14,22 @@ exports.signup = (req, res) => {
   }
 
   const user = new User(req.body);
-  user.save((err, user) => {
-    if (err) {
+  User.findOne(
+    {
+      email,
+    },
+    (error, user) => {
+      if (user) {
+        return res.status(400).json({
+          error: "User email exists!",
+        });
+      }
+    }
+  );
+  user.save((error, user) => {
+    if (error) {
       return res.status(400).json({
-        err: "Not able to save user in DB",
+        error: "Not able to save user in DB",
       });
     }
     return res.json({
@@ -42,8 +54,8 @@ exports.signin = (req, res) => {
     {
       email,
     },
-    (err, user) => {
-      if (err || !user) {
+    (error, user) => {
+      if (error || !user) {
         return res.status(400).json({
           error: "user email does not exists!",
         });
@@ -82,39 +94,33 @@ exports.signout = (req, res) => {
   });
 };
 
-
 //for protected routes
 exports.isSignedIn = expressjwt({
   secret: process.env.SECRET,
   algorithms: ["HS256"],
-  userProperty: "auth"
+  userProperty: "auth",
 });
 
-
-//custom middlewares 
+//custom middlewares
 exports.isAuthorized = (req, res, next) => {
-
-    //profile will be coming up the frontend when the user would be created
-    let checker = req.profile && req.auth && req.profile._id == req.auth._id; 
-
-    if(!checker){
-        return res.status(403).json({
-            error: "You are not authorized to do this operation, please make sure you have proper rights to do so...!"
-        })
-    }
-
-    next(); 
-}
+  //profile will be coming up the frontend when the user would be created
+  let checker = req.profile && req.auth && req.profile._id == req.auth._id;
+  if (!checker) {
+    return res.status(403).json({
+      error:
+        "You are not authorized to do this operation, please make sure you have proper rights to do so...!",
+    });
+  }
+  next();
+};
 
 exports.isAdmin = (req, res, next) => {
+  //again, profile is coming up from the frontend when the user would be created
+  if (req.profile.role !== 1) {
+    return res.status(403).json({
+      error: "You are not an ADMIN!!!",
+    });
+  }
 
-    //again, profile is coming up from the frontend when the user would be created
-    if(req.profile.role !== 1)
-    {
-        return res.status(403).json({
-            error: "You are not an ADMIN!!!"
-        })
-    }
-
-    next(); 
-}
+  next();
+};

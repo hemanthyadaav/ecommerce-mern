@@ -1,8 +1,8 @@
 const Category = require("../models/category");
 
 exports.getCategoryById = (req, res, next, id) => {
-  Category.findById(id).exec((err, category) => {
-    if (err || !category) {
+  Category.findById(id).exec((error, category) => {
+    if (error || !category) {
       return res.status(400).json({
         error: `No Category found with id ${id}`,
       });
@@ -14,8 +14,8 @@ exports.getCategoryById = (req, res, next, id) => {
 
 exports.createCategory = (req, res) => {
   const category = new Category(req.body);
-  category.save((err, category) => {
-    if (err || !category) {
+  category.save((error, category) => {
+    if (error || !category) {
       return res.status(400).json({
         error: `Not able to save category in DB`,
       });
@@ -29,8 +29,8 @@ exports.getCategory = (req, res) => {
 };
 
 exports.getAllCategories = (req, res) => {
-  Category.find().exec((err, categories) => {
-    if (err || !categories) {
+  Category.find().exec((error, categories) => {
+    if (error || !categories) {
       return res.json(400).json({
         error: "Not able to get all categories from DB",
       });
@@ -43,8 +43,8 @@ exports.updateCategory = (req, res) => {
   const category = req.category;
   category.name = req.body.name;
 
-  category.save((err, updatedCategory) => {
-    if (err) {
+  category.save((error, updatedCategory) => {
+    if (error) {
       return res.status(400).json({
         error: `Failed to update category!`,
       });
@@ -56,8 +56,8 @@ exports.updateCategory = (req, res) => {
 exports.deleteCategory = (req, res) => {
   const category = req.category;
 
-  category.remove((err, category) => {
-    if (err || !category) {
+  category.remove((error, category) => {
+    if (error || !category) {
       return res.status(400).json({
         error: `Failed to delete category`,
       });

@@ -4,8 +4,8 @@ const Order = require("../models/order");
 const router = express.Router();
 
 exports.getUserById = (req, res, next, id) => {
-  User.findById(id).exec((err, user) => {
-    if (err || !user) {
+  User.findById(id).exec((error, user) => {
+    if (error || !user) {
       return res.status(400).json({
         error: `No user found with user id ${id}`,
       });
@@ -30,8 +30,8 @@ exports.updateUser = (req, res) => {
     },
     { $set: req.body },
     { new: true },
-    (err, user) => {
-      if (err) {
+    (error, user) => {
+      if (error) {
         return res.status(400).json({
           error: "Not able to update the user!",
         });
@@ -47,8 +47,8 @@ exports.updateUser = (req, res) => {
 exports.getUserPurchaseList = (req, res) => {
   Order.find({ user: req.profile._id })
     .populate("user", "_id firstName")
-    .exec((err, orders) => {
-      if (err || !orders) {
+    .exec((error, orders) => {
+      if (error || !orders) {
         return res.status(400).json({
           error: `Not able to fetch orders for this user ${
             req.profile?._id + " " + req.profile?.firstName
@@ -82,8 +82,8 @@ exports.pushOrderInPurchaseList = (req, res, next) => {
     },
     { $push: { purchases } },
     { new: true },
-    (err, purchases) => {
-      if (err) {
+    (error, purchases) => {
+      if (error) {
         return res.status(400).json({
           error: "Unable to save Purchases!",
         });
