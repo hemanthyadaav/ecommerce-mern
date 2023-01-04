@@ -18,17 +18,43 @@ import { Fragment } from "react";
 import { useNavigate } from "react-router-dom";
 import { isAuthenticated, signout } from "../auth/helper";
 import { APP_NAME } from "../backend";
-import { ADASHBOARD, CART, DASHBOARD, HOME, SIGNIN, SIGNUP } from "../links";
+import {
+  ADASHBOARD,
+  CART,
+  CCATEGORY,
+  CPRODUCT,
+  DASHBOARD,
+  HOME,
+  MORDERS,
+  MPRODUCT,
+  SIGNIN,
+  SIGNUP,
+} from "../links";
 import { theme } from "../theme";
 
 const drawerWidth = 240;
-const navItems = ["Home", "Cart", "Dashboard"];
+const navItems = ["Home", "Cart", "DashBoard"];
+
+const adminBoardItems = [
+  "Home",
+  "Create-Product",
+  "Create-Category",
+  "Manage-Products",
+  "Manage-Orders",
+];
+
+const adminLinks = {
+  Home: HOME,
+  "Create-Product": CPRODUCT,
+  "Create-Category": CCATEGORY,
+  "Manage-Products": MPRODUCT,
+  "Manage-Orders": MORDERS,
+};
 
 const links = {
   Home: HOME,
   Cart: CART,
   Dashboard: DASHBOARD,
-  "A. Dashboard": ADASHBOARD,
   Signup: SIGNUP,
   SignIn: SIGNIN,
 };
@@ -60,26 +86,30 @@ function Navbar(props) {
       </Typography>
       <Divider />
       <List>
-        {navItems.map((item) => (
-          <ListItem key={item} disablePadding>
-            <ListItemButton
-              sx={{ textAlign: "center" }}
-              onClick={() => handleClick(links[item])}
-            >
-              <ListItemText primary={item} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-        {isAuthenticated() && isAuthenticated().user.role === 1 && (
-          <ListItem disablePadding>
-            <ListItemButton
-              sx={{ textAlign: "center" }}
-              onClick={() => handleClick(links["A. Dashboard"])}
-            >
-              <ListItemText primary={"A. Dashboard"} />
-            </ListItemButton>
-          </ListItem>
-        )}
+        {isAuthenticated() &&
+          isAuthenticated().user.role === 0 &&
+          navItems.map((item) => (
+            <ListItem key={item} disablePadding>
+              <ListItemButton
+                sx={{ textAlign: "center" }}
+                onClick={() => handleClick(links[item])}
+              >
+                <ListItemText primary={item} />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        {isAuthenticated() &&
+          isAuthenticated().user.role === 1 &&
+          adminBoardItems.map((item) => (
+            <ListItem key={item} disablePadding>
+              <ListItemButton
+                sx={{ textAlign: "center" }}
+                onClick={() => handleClick(adminLinks[item])}
+              >
+                <ListItemText primary={item} />
+              </ListItemButton>
+            </ListItem>
+          ))}
 
         {!isAuthenticated() && (
           <Fragment>
@@ -143,23 +173,28 @@ function Navbar(props) {
             {APP_NAME}
           </Typography>
           <Box sx={{ display: { xs: "none", sm: "block" } }}>
-            {navItems.map((item, index) => (
-              <Button
-                key={index}
-                sx={{ color: "white" }}
-                onClick={() => handleClick(links[item])}
-              >
-                {item}
-              </Button>
-            ))}
-            {isAuthenticated() && isAuthenticated().user.role === 1 && (
-              <Button
-                sx={{ color: "white" }}
-                onClick={() => handleClick(links["A. Dashboard"])}
-              >
-                A. Dashboard
-              </Button>
-            )}
+            {isAuthenticated() &&
+              isAuthenticated().user.role === 0 &&
+              navItems.map((item, index) => (
+                <Button
+                  key={index}
+                  sx={{ color: "white" }}
+                  onClick={() => handleClick(links[item])}
+                >
+                  {item}
+                </Button>
+              ))}
+            {isAuthenticated() &&
+              isAuthenticated().user.role === 1 &&
+              adminBoardItems.map((item, index) => (
+                <Button
+                  key={index}
+                  sx={{ color: "white" }}
+                  onClick={() => handleClick(adminLinks[item])}
+                >
+                  {item}
+                </Button>
+              ))}
             {!isAuthenticated() && (
               <Fragment>
                 <Button

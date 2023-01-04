@@ -5,3 +5,8 @@ export const SIGNOUT = "/signout"
 export const DASHBOARD = "/dashboard"
 export const ADASHBOARD = "/adminDashboard"
 export const CART = "/cart"
+
+export const CCATEGORY = "/admin/create/category"
+export const CPRODUCT = "/admin/create/product"
+export const MORDERS = "/admin/orders"
+export const MPRODUCT = "/admin/products"
