@@ -10,20 +10,48 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
-import { color } from "@mui/system";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import { isAuthenticated } from "../auth/helper";
-import { createCategory } from "./helper/adminapicall";
+import {
+  createCategory,
+  createProduct,
+  getAllCategories,
+} from "./helper/adminapicall";
 
 const AddProduct = () => {
   const theme = useTheme();
-  const [value, setValue] = useState({
+
+  const { user, token } = isAuthenticated();
+
+  const [values, setValues] = useState({
     name: "",
     description: "",
     price: "",
     stock: "",
+    photo: "",
+    category: "",
+    categories: [],
+    loading: false,
+    error: "",
+    createdProduct: "",
+    getARedirect: false,
+    formData: "",
   });
+
+  const {
+    name,
+    description,
+    price,
+    stock,
+    categories,
+    category,
+    loading,
+    error,
+    createdProduct,
+    formData,
+    getARedirect,
+  } = values;
 
   const sizing = {
     mt: 2,
@@ -50,12 +78,67 @@ const AddProduct = () => {
     color: "white",
   };
 
-  const handleChange = (name) => (e) => {
-    //
+  const preload = () => {
+    getAllCategories()
+      .then((data) => {
+        if (data.error) {
+          setValues({ ...values, error: data.error });
+        } else {
+          setValues({ ...values, categories: data, formData: new FormData() });
+          console.log("CATEGORIES: ", data);
+        }
+      })
+      .catch((err) => console.log(err));
   };
 
-  const onSubmit = () => {
-    //
+  useEffect(() => {
+    preload();
+  }, []);
+
+  const handleChange = (name) => (e) => {
+    const value = name === "photo" ? e.target.files[0] : e.target.value;
+    formData.set(name, value);
+    setValues({ ...values, [name]: value });
+    if (name === "photo") {
+      if (
+        e.target.files[0].name.split(".")[1] == "jpg" ||
+        e.target.files[0].name.split(".")[1] == "jpeg" ||
+        e.target.files[0].name.split(".")[1] == "png"
+      ) {
+        return toast.success(`${e.target.files[0].name} added successfully`);
+      } else {
+        return toast.error(
+          `${e.target.files[0].name} has Unsupported file format!`
+        );
+      }
+    }
+  };
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    setValues({ ...values, error: "", loading: true });
+    createProduct(user._id, token, formData)
+      .then((data) => {
+        if (data.error) {
+          setValues({ ...values, error: data.error });
+          console.log(data.error);
+          return toast.error(data.error);
+        } else {
+          setValues({
+            ...values,
+            name: "",
+            description: "",
+            price: "",
+            photo: "",
+            stock: "",
+            loading: false,
+            category: "",
+            createdProduct: data.name,
+          });
+          return toast.success("Product Created Successfully!");
+        }
+      })
+      .catch((err) => console.log(err));
   };
 
   return (
@@ -67,14 +150,14 @@ const AddProduct = () => {
         autoFocus
         placeholder="Eg. SweatShirt"
         label="Product Name"
-        onChange={handleChange}
-        // value={name}
+        onChange={handleChange("name")}
+        value={name}
       />
       <TextField
         sx={sizing}
         label="Description"
-        onChange={handleChange}
-        // value={name}
+        onChange={handleChange("description")}
+        value={description}
       />
 
       <FormControl required>
@@ -94,6 +177,9 @@ const AddProduct = () => {
           id="outlined-adornment-amount"
           startAdornment={<InputAdornment position="start">₹</InputAdornment>}
           label="Price"
+          value={price}
+          placeholder="Please enter Price"
+          onChange={handleChange("price")}
         />
       </FormControl>
 
@@ -102,14 +188,16 @@ const AddProduct = () => {
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
-          defaultValue={10}
-          //   value={age}
+          value={category}
           label="Category"
-          //   onChange={handleChange}
+          onChange={handleChange("category")}
         >
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
+          {categories &&
+            categories.map((cate, ind) => (
+              <MenuItem key={ind} value={cate._id}>
+                {cate.name}
+              </MenuItem>
+            ))}
         </Select>
       </FormControl>
 
@@ -118,12 +206,12 @@ const AddProduct = () => {
         required
         placeholder="Eg. 20"
         label="Quantity"
-        onChange={handleChange}
-        // value={name}
+        onChange={handleChange("stock")}
+        value={stock}
       />
       <Button sx={sizing} variant="outlined" component="label">
         Product Photo
-        <input type="file" hidden />
+        <input type="file" hidden onChange={handleChange("photo")} />
       </Button>
       <Button
         sx={buttonsizing}
