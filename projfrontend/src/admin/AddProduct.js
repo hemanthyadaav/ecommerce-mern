@@ -101,9 +101,9 @@ const AddProduct = () => {
     setValues({ ...values, [name]: value });
     if (name === "photo") {
       if (
-        e.target.files[0].name.split(".")[1] == "jpg" ||
-        e.target.files[0].name.split(".")[1] == "jpeg" ||
-        e.target.files[0].name.split(".")[1] == "png"
+        e.target.files[0].name.split(".")[1] === "jpg" ||
+        e.target.files[0].name.split(".")[1] === "jpeg" ||
+        e.target.files[0].name.split(".")[1] === "png"
       ) {
         return toast.success(`${e.target.files[0].name} added successfully`);
       } else {
