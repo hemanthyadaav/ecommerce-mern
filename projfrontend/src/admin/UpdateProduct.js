@@ -188,6 +188,16 @@ const UpdateProduct = () => {
         value={description}
       />
 
+      <TextField
+        sx={sizing}
+        required
+        placeholder="Eg. https://example.com/tshirt.jpg"
+        label="Image URL"
+        onChange={handleChange("photo")}
+        InputLabelProps={{ shrink: stock !== "" ? true : false }}
+        value={photo}
+      />
+
       <FormControl required>
         <InputLabel
           sx={{
@@ -212,6 +222,15 @@ const UpdateProduct = () => {
         />
       </FormControl>
 
+      <TextField
+        sx={sizing}
+        required
+        placeholder="Eg. 20"
+        label="Quantity"
+        InputLabelProps={{ shrink: stock !== "" ? true : false }}
+        onChange={handleChange("stock")}
+        value={stock}
+      />
       <FormControl required sx={sizing}>
         <InputLabel id="demo-simple-select-label">Category</InputLabel>
         <Select
@@ -231,23 +250,6 @@ const UpdateProduct = () => {
         </Select>
       </FormControl>
 
-      <TextField
-        sx={sizing}
-        required
-        placeholder="Eg. 20"
-        label="Quantity"
-        InputLabelProps={{ shrink: stock !== "" ? true : false }}
-        onChange={handleChange("stock")}
-        value={stock}
-      />
-      <TextField
-        sx={sizing}
-        required
-        placeholder="Eg. https://example.com/tshirt.jpg"
-        label="Image URL"
-        onChange={handleChange("photo")}
-        value={photo}
-      />
       <Button
         sx={buttonsizing}
         variant="contained"

@@ -24,8 +24,8 @@ const ProductCard = ({ product, addToCart = true }) => {
         <CardMedia
           component="img"
           height="160"
-          image="https://mui.com/static/images/cards/contemplative-reptile.jpg"
-          alt="green iguana"
+          image={product.photo}
+          alt="T-shirt image"
         />
         <CardContent sx={{ textAlign: "center" }}>
           <Typography
@@ -34,15 +34,24 @@ const ProductCard = ({ product, addToCart = true }) => {
             variant="h5"
             component="div"
             fontWeight="520"
-            color="info"
+            color="secondary"
           >
             {product.name.toUpperCase()}
           </Typography>
           <Typography variant="body2" color="text.secondary" textAlign="center">
-            {product.description}
+            {product.description.replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
+              letter.toUpperCase()
+            )}
           </Typography>
           <Chip
             sx={{ mt: 2 }}
+            label={`Stock - ${product.stock}`}
+            variant="outlined"
+            color="info"
+            // avatar={<Avatar>₹</Avatar>}
+          />
+          <Chip
+            sx={{ mt: 2, ml: 1 }}
             label={`${product.price}/-`}
             variant="outlined"
             color="info"

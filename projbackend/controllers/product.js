@@ -70,7 +70,7 @@ exports.getProductById = (req, res, next, id) => {
 
 exports.getProduct = (req, res) => {
   // doing photo as undefined so that we can fire photo through middleware in background, for performance optimization
-  req.product.photo = undefined;
+  // req.product.photo = undefined;
   return res.json(req.product);
 };
 
@@ -153,7 +153,7 @@ exports.getAllProducts = (req, res) => {
   let sortBy = req.query.sortBy ? req.query.sortBy : "_id";
   let sortType = req.query.sortType ? req.query.sortType : "asc";
   Product.find()
-    .select("-photo")
+    // .select("-photo")
     .populate("category")
     .limit(limit)
     .sort([[sortBy, sortType]])

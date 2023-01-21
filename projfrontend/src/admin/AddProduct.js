@@ -13,8 +13,10 @@ import {
   CircularProgress,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 import { toast, ToastContainer } from "react-toastify";
 import { isAuthenticated } from "../auth/helper";
+import { HOME, MPRODUCT } from "../links";
 import { createProduct, getAllCategories } from "./helper/adminapicall";
 
 const AddProduct = () => {
@@ -107,6 +109,8 @@ const AddProduct = () => {
     setValues({ ...values, [name]: value });
   };
 
+  const navigate = useNavigate();
+
   const onSubmit = (e) => {
     e.preventDefault();
     setValues({ ...values, error: "", loading: true });
@@ -125,18 +129,21 @@ const AddProduct = () => {
           console.log(data.error);
           return toast.error(data.error);
         } else {
-          setValues({
-            ...values,
-            name: "",
-            description: "",
-            price: "",
-            photo: "",
-            stock: "",
-            loading: false,
-            category: "",
-            createdProduct: data.name,
-          });
-          return toast.success("Product Created Successfully!");
+          toast.success("Product Created Successfully!");
+          // setValues({
+          //   ...values,
+          //   name: "",
+          //   description: "",
+          //   price: "",
+          //   photo: "",
+          //   stock: "",
+          //   loading: false,
+          //   category: "",
+          //   createdProduct: data.name,
+          // });
+          setTimeout(() => {
+            return navigate(HOME);
+          }, 2000);
         }
       })
       .catch((err) => console.log(err));
