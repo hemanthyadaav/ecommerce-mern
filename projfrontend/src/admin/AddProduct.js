@@ -9,14 +9,13 @@ import {
   InputAdornment,
   Select,
   MenuItem,
+  Box,
+  CircularProgress,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import { isAuthenticated } from "../auth/helper";
-import {
-  createProduct,
-  getAllCategories
-} from "./helper/adminapicall";
+import { createProduct, getAllCategories } from "./helper/adminapicall";
 
 const AddProduct = () => {
   const theme = useTheme();
@@ -78,12 +77,19 @@ const AddProduct = () => {
   };
 
   const preload = () => {
+    setValues({ ...values, loading: true });
     getAllCategories()
       .then((data) => {
         if (data.error) {
           setValues({ ...values, error: data.error });
+          return toast.error(data.error);
         } else {
-          setValues({ ...values, categories: data, formData: new FormData() });
+          setValues({
+            ...values,
+            categories: data,
+            loading: false,
+            formData: new FormData(),
+          });
           console.log("CATEGORIES: ", data);
         }
       })
@@ -140,7 +146,7 @@ const AddProduct = () => {
       .catch((err) => console.log(err));
   };
 
-  return (
+  return !loading ? (
     <Stack component="form" onSubmit={onSubmit}>
       <TextField
         sx={sizing}
@@ -222,6 +228,12 @@ const AddProduct = () => {
       </Button>
       <ToastContainer />
     </Stack>
+  ) : (
+    <Box
+      sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
+    >
+      <CircularProgress />
+    </Box>
   );
 };
 
