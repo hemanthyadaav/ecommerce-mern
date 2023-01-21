@@ -5,7 +5,7 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { Button, CardActionArea, CardActions, Grid } from "@mui/material";
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product, addToCart = true }) => {
   const buttonsizing = {
     width: "100%",
     py: 1,
@@ -52,27 +52,31 @@ const ProductCard = ({ product }) => {
           alignItems="center"
           spacing={1}
         >
-          <Grid item>
-            <Button
-              color="primary"
-              variant="contained"
-              sx={buttonsizing}
-              style={{ color: "white" }}
-              disableElevation
-            >
-              Add to Cart
-            </Button>
-          </Grid>
-          <Grid item>
-            <Button
-              color="error"
-              variant="outlined"
-              sx={buttonsizing}
-              disableElevation
-            >
-              Remove from Cart
-            </Button>
-          </Grid>
+          {addToCart && (
+            <Grid item>
+              <Button
+                color="primary"
+                variant="contained"
+                sx={buttonsizing}
+                style={{ color: "white" }}
+                disableElevation
+              >
+                Add to Cart
+              </Button>
+            </Grid>
+          )}
+          {!addToCart && (
+            <Grid item>
+              <Button
+                color="error"
+                variant="outlined"
+                sx={buttonsizing}
+                disableElevation
+              >
+                Remove from Cart
+              </Button>
+            </Grid>
+          )}
         </Grid>
       </CardActions>
     </Card>
