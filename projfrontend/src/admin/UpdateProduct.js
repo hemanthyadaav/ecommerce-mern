@@ -13,9 +13,10 @@ import {
 } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { toast, ToastContainer } from "react-toastify";
 import { isAuthenticated } from "../auth/helper";
+import { MPRODUCT } from "../links";
 import {
   getAllCategories,
   getProduct,
@@ -141,6 +142,7 @@ const UpdateProduct = () => {
       }
     }
   };
+  const navigate = useNavigate();
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -169,6 +171,9 @@ const UpdateProduct = () => {
           });
           toast.success(`${data.name} Updated Successfully!`);
           // setLoading(false);
+          setTimeout(() => {
+            return navigate(MPRODUCT);
+          }, 3000);
         }
       })
       .catch((err) => console.log(err));
