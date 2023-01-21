@@ -45,6 +45,7 @@ const AddProduct = () => {
     categories,
     category,
     loading,
+    photo,
     error,
     createdProduct,
     formData,
@@ -104,19 +105,6 @@ const AddProduct = () => {
     const value = name === "photo" ? e.target.files[0] : e.target.value;
     formData.set(name, value);
     setValues({ ...values, [name]: value });
-    if (name === "photo") {
-      if (
-        e.target.files[0].name.split(".")[1] === "jpg" ||
-        e.target.files[0].name.split(".")[1] === "jpeg" ||
-        e.target.files[0].name.split(".")[1] === "png"
-      ) {
-        return toast.success(`${e.target.files[0].name} added successfully`);
-      } else {
-        return toast.error(
-          `${e.target.files[0].name} has Unsupported file format!`
-        );
-      }
-    }
   };
 
   const onSubmit = (e) => {
@@ -214,10 +202,19 @@ const AddProduct = () => {
         onChange={handleChange("stock")}
         value={stock}
       />
-      <Button sx={sizing} variant="outlined" component="label">
+      {/* <Button sx={sizing} variant="outlined" component="label">
         Product Photo
         <input type="file" hidden onChange={handleChange("photo")} />
-      </Button>
+      </Button> */}
+      <TextField
+        sx={sizing}
+        required
+        placeholder="Eg. https://ex.com/image/tshirt.jpg"
+        label="Photo"
+        onChange={handleChange("photo")}
+        value={photo}
+      />
+
       <Button
         sx={buttonsizing}
         variant="contained"

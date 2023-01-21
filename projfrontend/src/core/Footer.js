@@ -7,16 +7,13 @@ function Footer() {
   return (
     <Box
       sx={{
-        position: {
-          xs: "sticky",
-          md: "absolute",
-        },
+        position: "fixed",
         bottom: 0,
         background: "#35BDD0",
         width: "100%",
         py: 2,
         textAlign: "center",
-        mt: 2,
+        mt: 3,
       }}
     >
       <CssBaseline />

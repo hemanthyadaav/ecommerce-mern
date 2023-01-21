@@ -39,7 +39,7 @@ const Home = () => {
       {products.map((product, index) => {
         return (
           <Grid item key={index}>
-            <ProductCard addToCart={true} />
+            <ProductCard product={product} addToCart={true} />
           </Grid>
         );
       })}

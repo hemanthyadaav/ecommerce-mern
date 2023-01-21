@@ -3,7 +3,14 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import { Button, CardActionArea, CardActions, Grid } from "@mui/material";
+import {
+  Avatar,
+  Button,
+  CardActionArea,
+  CardActions,
+  Grid,
+} from "@mui/material";
+import Chip from "@mui/material/Chip";
 
 const ProductCard = ({ product, addToCart = true }) => {
   const buttonsizing = {
@@ -20,26 +27,33 @@ const ProductCard = ({ product, addToCart = true }) => {
           image="https://mui.com/static/images/cards/contemplative-reptile.jpg"
           alt="green iguana"
         />
-        <CardContent>
+        <CardContent sx={{ textAlign: "center" }}>
           <Typography
             textAlign="center"
             gutterBottom
             variant="h5"
             component="div"
-            fontWeight="600"
-            color="primary"
+            fontWeight="520"
+            color="info"
           >
-            Lizard
+            {product.name.toUpperCase()}
           </Typography>
           <Typography variant="body2" color="text.secondary" textAlign="center">
-            Lizards are a widespread group of squamate reptiles, with over 6,000
-            species, ranging across all continents except Antarctica
+            {product.description}
           </Typography>
+          <Chip
+            sx={{ mt: 2 }}
+            label={`${product.price}/-`}
+            variant="outlined"
+            color="info"
+            avatar={<Avatar>₹</Avatar>}
+          />
         </CardContent>
       </CardActionArea>
+
       <CardActions
         sx={{
-          my: {
+          mb: {
             xs: 1,
             sm: 2,
           },
