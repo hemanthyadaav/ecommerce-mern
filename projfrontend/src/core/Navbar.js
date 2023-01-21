@@ -25,6 +25,7 @@ import {
   CPRODUCT,
   DASHBOARD,
   HOME,
+  MCATEGORY,
   MORDERS,
   MPRODUCT,
   SIGNIN,
@@ -40,6 +41,7 @@ const adminBoardItems = [
   "Create-Product",
   "Create-Category",
   "Manage-Products",
+  "Manage-Categories",
   "Manage-Orders",
 ];
 
@@ -47,6 +49,7 @@ const adminLinks = {
   Home: HOME,
   "Create-Product": CPRODUCT,
   "Create-Category": CCATEGORY,
+  "Manage-Categories": MCATEGORY,
   "Manage-Products": MPRODUCT,
   "Manage-Orders": MORDERS,
 };

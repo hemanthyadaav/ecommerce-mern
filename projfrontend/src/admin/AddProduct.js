@@ -14,9 +14,8 @@ import React, { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import { isAuthenticated } from "../auth/helper";
 import {
-  createCategory,
   createProduct,
-  getAllCategories,
+  getAllCategories
 } from "./helper/adminapicall";
 
 const AddProduct = () => {

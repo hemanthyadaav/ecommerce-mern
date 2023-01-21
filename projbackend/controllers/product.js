@@ -79,6 +79,7 @@ exports.getPhoto = (req, res, next) => {
 };
 
 exports.updateProduct = (req, res) => {
+  console.log("updateProduct backend called");
   let form = new formidable.IncomingForm();
   form.keepExtensions = true;
 
@@ -115,6 +116,8 @@ exports.updateProduct = (req, res) => {
       res.json(updatedProduct);
     });
   });
+
+  console.log("Product updated successfully");
 };
 
 exports.deleteProduct = (req, res) => {

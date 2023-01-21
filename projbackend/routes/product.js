@@ -22,9 +22,16 @@ router.param("userId", getUserById);
 router.param("productId", getProductById);
 
 // routes
-
 router.get("/product/all", getAllProducts);
 router.get("/products/categories", getAllUniqueCategories);
+
+router.put(
+  "/product/:productId/:userId",
+  isSignedIn,
+  isAuthorized,
+  isAdmin,
+  updateProduct
+);
 
 router.post(
   "/product/create/:userId",
@@ -42,12 +49,6 @@ router.delete(
   isAdmin,
   deleteProduct
 );
-router.put(
-  "/product/:productId/:userId",
-  isSignedIn,
-  isAuthorized,
-  isAdmin,
-  updateProduct
-);
+
 
 module.exports = router;
