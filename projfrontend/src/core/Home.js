@@ -1,4 +1,4 @@
-import { Grid, Typography } from "@mui/material";
+import { Grid, Typography, Box, CircularProgress } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import { API } from "../backend";
@@ -8,14 +8,17 @@ import ProductCard from "./ProductCard";
 
 const Home = () => {
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const getProducts = () => {
+    setLoading(true);
     getAllProducts()
       .then((data) => {
         if (data.error) {
           return toast.error(data.error);
         } else {
           setProducts(data);
+          setLoading(false);
         }
       })
       .catch((err) => console.log(err));
@@ -25,7 +28,7 @@ const Home = () => {
     getProducts();
   }, []);
 
-  return (
+  return !loading ? (
     <Grid
       container
       spacing={6}
@@ -46,6 +49,12 @@ const Home = () => {
 
       <ToastContainer />
     </Grid>
+  ) : (
+    <Box
+      sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
+    >
+      <CircularProgress />
+    </Box>
   );
 };
 

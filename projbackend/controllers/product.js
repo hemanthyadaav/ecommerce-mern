@@ -5,47 +5,52 @@ const formidable = require("formidable");
 const fs = require("fs");
 
 exports.createProduct = (req, res) => {
-  let form = new formidable.IncomingForm();
-  form.keepExtensions = true;
+  // let form = new formidable.IncomingForm();
+  // form.keepExtensions = true;
 
-  form.parse(req, (error, fields, file) => {
+  // form.parse(req, (error, fields) => {
+  //   console.log("BACKEND", req.body);
+  //   if (error) {
+  //     console.log("BACKEND", error);
+  //     return res.status(400).json({
+  //       error: "Problem with Image",
+  //     });
+  //   }
+
+  console.log("createProduct called ", req.body);
+
+  const { name, description, price, category, stock, photo } = req.body;
+
+  if (!name || !description || !price || !category || !stock || !photo) {
+    return res.status(400).json({
+      error: "All Fields are compulsory !",
+    });
+  }
+
+  const product = new Product(req.body);
+
+  // let product = new Product(fields);
+
+  // // handle file here
+  // if (file.photo) {
+  //   if (file.photo.size > 3 * 1024 * 1024) {
+  //     return res.status(400).json({
+  //       error: "File size too big!",
+  //     });
+  //   } else {
+  //     // console.log(file.photo.filepath)
+  //     product.photo.data = fs.readFileSync(file.photo.filepath);
+  //     product.photo.contentType = file.photo.type;
+  //   }
+  // }
+
+  product.save((error, product) => {
     if (error) {
       return res.status(400).json({
-        error: "Problem with Image",
+        error: "Saving T-Shirt in DB failed!",
       });
     }
-
-    const { name, description, price, category, stock } = fields;
-
-    if (!name || !description || !price || !category || !stock) {
-      return res.status(400).json({
-        error: "All Fields are compulsory!",
-      });
-    }
-
-    let product = new Product(fields);
-
-    // handle file here
-    if (file.photo) {
-      if (file.photo.size > 3 * 1024 * 1024) {
-        return res.status(400).json({
-          error: "File size too big!",
-        });
-      } else {
-        // console.log(file.photo.filepath)
-        product.photo.data = fs.readFileSync(file.photo.filepath);
-        product.photo.contentType = file.photo.type;
-      }
-    }
-
-    product.save((error, product) => {
-      if (error) {
-        return res.status(400).json({
-          error: "Saving T-Shirt in DB failed!",
-        });
-      }
-      res.json(product);
-    });
+    return res.json(product);
   });
 };
 
@@ -80,45 +85,53 @@ exports.getPhoto = (req, res, next) => {
 
 exports.updateProduct = (req, res) => {
   console.log("updateProduct backend called");
-  let form = new formidable.IncomingForm();
-  form.keepExtensions = true;
+  // let form = new formidable.IncomingForm();
+  // form.keepExtensions = true;
 
-  form.parse(req, (error, fields, file) => {
-    if (error) {
-      return res.status(400).json({
-        error: "Problem with Image",
-      });
-    }
+  console.log("PRODUCT BACKEND ", req.body);
+  // form.parse(req, (error, fields, file) => {
+  //   if (error) {
+  //     return res.status(400).json({
+  //       error: "Problem with Image",
+  //     });
+  //   }
 
-    // update product
-    let product = req.product;
-    product = _.extend(product, req.body);
+  // const { name, description, price, category, stock, photo } = req.body;
 
-    // handle file here
-    if (file.photo) {
-      if (file.photo.size > 3 * 1024 * 1024) {
-        return res.status(400).json({
-          error: "File size too big!",
-        });
-      } else {
-        // console.log(file.photo.filepath)
-        product.photo.data = fs.readFileSync(file.photo.filepath);
-        product.photo.contentType = file.photo.type;
-      }
-    }
+  // update product
+  // const product = req.product;
+  console.log(req.product);
 
-    product.save((error, updatedProduct) => {
+  Product.findOneAndUpdate(
+    req.product._id,
+    req.body,
+    (error, updatedProduct) => {
       if (error) {
         return res.status(400).json({
           error: "Updating T-Shirt in DB failed!",
         });
       }
-      res.json(updatedProduct);
-    });
-  });
+      return res.json(updatedProduct);
+    }
+  );
 
   console.log("Product updated successfully");
 };
+
+// product = _.extend(product, req.body);
+
+// handle file here
+// if (file.photo) {
+//   if (file.photo.size > 3 * 1024 * 1024) {
+//     return res.status(400).json({
+//       error: "File size too big!",
+//     });
+//   } else {
+//     // console.log(file.photo.filepath)
+//     product.photo.data = fs.readFileSync(file.photo.filepath);
+//     product.photo.contentType = file.photo.type;
+//   }
+// }
 
 exports.deleteProduct = (req, res) => {
   let product = req.product;

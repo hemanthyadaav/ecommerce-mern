@@ -51,6 +51,7 @@ const UpdateProduct = () => {
     categories,
     category,
     updatedProduct,
+    photo,
     formData,
   } = values;
 
@@ -79,19 +80,6 @@ const UpdateProduct = () => {
     color: "white",
   };
 
-  const getCategories = () => {
-    getAllCategories()
-      .then((data) => {
-        if (data.error) {
-          setValues({ ...values, error: data.error });
-        } else {
-          setValues({ categories: data, formData: new FormData() });
-          console.log("CATEGORIES: ", data);
-        }
-      })
-      .catch((err) => console.log(err));
-  };
-
   const preload = (productId) => {
     setLoading(true);
     getProduct(productId)
@@ -99,8 +87,16 @@ const UpdateProduct = () => {
         if (data.error) {
           setValues({ ...values, error: data.error });
         } else {
-          getCategories();
-          console.log(data);
+          getAllCategories()
+            .then((data) => {
+              if (data.error) {
+                setValues({ ...values, error: data.error });
+              } else {
+                setValues({ categories: data });
+                console.log("CATEGORIES: ", data);
+              }
+            })
+            .catch((err) => console.log(err));
           setValues({
             ...values,
             name: data.name,
@@ -109,9 +105,9 @@ const UpdateProduct = () => {
             stock: data.stock,
             photo: data.photo,
             category: data.category?._id,
-            formData: new FormData(),
           });
           setLoading(false);
+          console.log("CATEGORY", data.category._id);
         }
       })
       .catch((err) => console.log(err));
@@ -125,33 +121,25 @@ const UpdateProduct = () => {
   }, []);
 
   const handleChange = (name) => (e) => {
-    const value = name === "photo" ? e.target.files[0] : e.target.value;
-    formData.set(name, value);
+    const value = e.target.value;
+    // formData.set(name, value);
     setValues({ ...values, [name]: value });
-    if (name === "photo") {
-      if (
-        e.target.files[0].name.split(".")[1] === "jpg" ||
-        e.target.files[0].name.split(".")[1] === "jpeg" ||
-        e.target.files[0].name.split(".")[1] === "png"
-      ) {
-        return toast.success(`${e.target.files[0].name} added successfully`);
-      } else {
-        return toast.error(
-          `${e.target.files[0].name} has Unsupported file format!`
-        );
-      }
-    }
   };
+
   const navigate = useNavigate();
 
   const onSubmit = (e) => {
     e.preventDefault();
     // setLoading(true);
     setValues({ ...values, error: "" });
-    console.log("REACT FORMDATA: ", formData);
-    console.log("REACT FORM: ", values);
-
-    updateProduct(id, user._id, token, formData)
+    updateProduct(id, user._id, token, {
+      name,
+      price,
+      description,
+      stock,
+      category,
+      photo,
+    })
       .then((data) => {
         if (data.error) {
           setValues({ ...values, error: data.error });
@@ -252,10 +240,14 @@ const UpdateProduct = () => {
         onChange={handleChange("stock")}
         value={stock}
       />
-      <Button sx={sizing} variant="outlined" component="label">
-        Product Photo
-        <input type="file" required hidden onChange={handleChange("photo")} />
-      </Button>
+      <TextField
+        sx={sizing}
+        required
+        placeholder="Eg. https://example.com/tshirt.jpg"
+        label="Image URL"
+        onChange={handleChange("photo")}
+        value={photo}
+      />
       <Button
         sx={buttonsizing}
         variant="contained"

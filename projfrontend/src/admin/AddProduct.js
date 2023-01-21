@@ -34,7 +34,7 @@ const AddProduct = () => {
     error: "",
     createdProduct: "",
     getARedirect: false,
-    formData: "",
+    // formData: "",
   });
 
   const {
@@ -48,7 +48,7 @@ const AddProduct = () => {
     photo,
     error,
     createdProduct,
-    formData,
+    // formData,
     getARedirect,
   } = values;
 
@@ -89,7 +89,7 @@ const AddProduct = () => {
             ...values,
             categories: data,
             loading: false,
-            formData: new FormData(),
+            // formData: new FormData(),
           });
           console.log("CATEGORIES: ", data);
         }
@@ -102,15 +102,23 @@ const AddProduct = () => {
   }, []);
 
   const handleChange = (name) => (e) => {
-    const value = name === "photo" ? e.target.files[0] : e.target.value;
-    formData.set(name, value);
+    const value = e.target.value;
+    // formData.set(name, value);
     setValues({ ...values, [name]: value });
   };
 
   const onSubmit = (e) => {
     e.preventDefault();
     setValues({ ...values, error: "", loading: true });
-    createProduct(user._id, token, formData)
+    // createProduct(user._id, token, formData)
+    createProduct(user._id, token, {
+      name,
+      price,
+      description,
+      stock,
+      category,
+      photo,
+    })
       .then((data) => {
         if (data.error) {
           setValues({ ...values, error: data.error });
@@ -152,6 +160,14 @@ const AddProduct = () => {
         onChange={handleChange("description")}
         value={description}
       />
+      <TextField
+        sx={sizing}
+        required
+        placeholder="Eg. https://example.com/tshirt.jpg"
+        label="Image URL"
+        onChange={handleChange("photo")}
+        value={photo}
+      />
 
       <FormControl required>
         <InputLabel
@@ -176,6 +192,19 @@ const AddProduct = () => {
         />
       </FormControl>
 
+      <TextField
+        sx={sizing}
+        required
+        placeholder="Eg. 20"
+        label="Quantity"
+        onChange={handleChange("stock")}
+        value={stock}
+      />
+      {/* <Button sx={sizing} variant="outlined" component="label">
+        Product Photo
+        <input type="file" hidden onChange={handleChange("photo")} />
+      </Button> */}
+
       <FormControl required sx={sizing}>
         <InputLabel id="demo-simple-select-label">Category</InputLabel>
         <Select
@@ -194,27 +223,6 @@ const AddProduct = () => {
         </Select>
       </FormControl>
 
-      <TextField
-        sx={sizing}
-        required
-        placeholder="Eg. 20"
-        label="Quantity"
-        onChange={handleChange("stock")}
-        value={stock}
-      />
-      {/* <Button sx={sizing} variant="outlined" component="label">
-        Product Photo
-        <input type="file" hidden onChange={handleChange("photo")} />
-      </Button> */}
-      <TextField
-        sx={sizing}
-        required
-        placeholder="Eg. https://ex.com/image/tshirt.jpg"
-        label="Photo"
-        onChange={handleChange("photo")}
-        value={photo}
-      />
-
       <Button
         sx={buttonsizing}
         variant="contained"
@@ -223,6 +231,7 @@ const AddProduct = () => {
       >
         Create
       </Button>
+
       <ToastContainer />
     </Stack>
   ) : (

@@ -2,14 +2,7 @@ import {
   Button,
   TextField,
   useTheme,
-  Stack,
-  FormControl,
-  InputLabel,
-  OutlinedInput,
-  InputAdornment,
-  Select,
-  MenuItem,
-  Box,
+  Stack, Box
 } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import React, { useEffect, useState } from "react";
@@ -18,11 +11,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { isAuthenticated } from "../auth/helper";
 import { MCATEGORY } from "../links";
 import {
-  getAllCategories,
-  getCategory,
-  getProduct,
-  updateCategory,
-  updateProduct,
+  getCategory, updateCategory
 } from "./helper/adminapicall";
 
 const UpdateCategory = () => {
