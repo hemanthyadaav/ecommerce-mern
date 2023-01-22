@@ -16,6 +16,7 @@ import {
 import Chip from "@mui/material/Chip";
 import { addItemToCart } from "./helper/CartHelper";
 import { ToastContainer, toast } from "react-toastify";
+import { CART } from "../links";
 
 const ProductCard = ({ product, addToCart = true }) => {
   const [loading, setLoading] = React.useState(false);
@@ -24,14 +25,14 @@ const ProductCard = ({ product, addToCart = true }) => {
   const addProductToCart = () => {
     setLoading(true);
     addItemToCart(product, () => {
-      toast.success("Item added to Cart!", {
+      setTimeout(() => {
+        return navigate(CART);
+      }, 3000);
+      setLoading(false);
+      return toast.success("Item added to Cart!", {
         hideProgressBar: true,
       });
-      setTimeout(() => {
-        return navigate("/cart");
-      }, 3000);
     });
-    setLoading(false);
   };
 
   const buttonsizing = {
@@ -76,7 +77,13 @@ const ProductCard = ({ product, addToCart = true }) => {
             label={`${product.price}/-`}
             variant="outlined"
             color="info"
-            avatar={<Avatar>₹</Avatar>}
+            avatar={
+              <Avatar>
+                <Typography variant="p" color="white">
+                  ₹
+                </Typography>
+              </Avatar>
+            }
           />
         </CardContent>
       </CardActionArea>
@@ -113,10 +120,11 @@ const ProductCard = ({ product, addToCart = true }) => {
           {!addToCart && (
             <Grid item>
               <Button
-                color="error"
+                color="warning"
                 variant="outlined"
                 sx={buttonsizing}
                 disableElevation
+                onClick={() => {}}
               >
                 Remove from Cart
               </Button>

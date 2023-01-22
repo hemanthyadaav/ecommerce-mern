@@ -8,11 +8,12 @@ import UpdateCategory from "./admin/UpdateCategory";
 import UpdateProduct from "./admin/UpdateProduct";
 import AdminRoutes from "./auth/helper/AdminRoutes";
 import PrivateRoutes from "./auth/helper/PrivateRoutes";
+import Cart from "./core/Cart";
 import Footer from "./core/Footer";
 import Home from "./core/Home";
 import Navbar from "./core/Navbar";
 import {
-  ADASHBOARD,
+  CART,
   CCATEGORY,
   CPRODUCT,
   HOME,
@@ -21,10 +22,8 @@ import {
   SIGNIN,
   SIGNUP,
   UCATEGORYID,
-  UPRODUCT,
   UPRODUCTID,
 } from "./links";
-import AdminDashBoard from "./user/AdminDashBoard";
 import Signin from "./user/Signin";
 import Signup from "./user/Signup";
 
@@ -38,6 +37,14 @@ const MyRoutes = () => {
           element={
             <PrivateRoutes>
               <Home />
+            </PrivateRoutes>
+          }
+        />
+        <Route
+          path={CART}
+          element={
+            <PrivateRoutes>
+              <Cart />
             </PrivateRoutes>
           }
         />
