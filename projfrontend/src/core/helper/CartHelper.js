@@ -1,7 +1,14 @@
-import React from "react";
+export const addItemToCart = (item, next) => {
+  let cart = [];
 
-const CartHelper = () => {
-  return <div></div>;
+  if (typeof window !== undefined) {
+    if (localStorage.getItem("cart")) {
+      cart = JSON.parse(localStorage.getItem("cart"));
+    }
+    cart.push({
+      ...item,
+    });
+    localStorage.setItem("cart", JSON.stringify(cart));
+    next();
+  }
 };
-
-export default CartHelper;

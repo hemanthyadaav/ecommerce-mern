@@ -1,18 +1,11 @@
-import {
-  Button,
-  TextField,
-  useTheme,
-  Stack, Box
-} from "@mui/material";
+import { Button, TextField, useTheme, Stack, Box } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { toast, ToastContainer } from "react-toastify";
 import { isAuthenticated } from "../auth/helper";
 import { MCATEGORY } from "../links";
-import {
-  getCategory, updateCategory
-} from "./helper/adminapicall";
+import { getCategory, updateCategory } from "./helper/adminapicall";
 
 const UpdateCategory = () => {
   const theme = useTheme();

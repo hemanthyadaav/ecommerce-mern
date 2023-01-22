@@ -3,23 +3,44 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
+import { useNavigate } from "react-router";
 import {
   Avatar,
+  Box,
   Button,
   CardActionArea,
   CardActions,
+  CircularProgress,
   Grid,
 } from "@mui/material";
 import Chip from "@mui/material/Chip";
+import { addItemToCart } from "./helper/CartHelper";
+import { ToastContainer, toast } from "react-toastify";
 
 const ProductCard = ({ product, addToCart = true }) => {
+  const [loading, setLoading] = React.useState(false);
+  const navigate = useNavigate();
+
+  const addProductToCart = () => {
+    setLoading(true);
+    addItemToCart(product, () => {
+      toast.success("Item added to Cart!", {
+        hideProgressBar: true,
+      });
+      setTimeout(() => {
+        return navigate("/cart");
+      }, 3000);
+    });
+    setLoading(false);
+  };
+
   const buttonsizing = {
     width: "100%",
     py: 1,
-    // minWidth: "200px",
   };
-  return (
+  return !loading ? (
     <Card sx={{ maxWidth: 345, width: { xs: 300 } }}>
+      <ToastContainer />
       <CardActionArea>
         <CardMedia
           component="img"
@@ -83,6 +104,7 @@ const ProductCard = ({ product, addToCart = true }) => {
                 sx={buttonsizing}
                 style={{ color: "white" }}
                 disableElevation
+                onClick={addProductToCart}
               >
                 Add to Cart
               </Button>
@@ -103,6 +125,12 @@ const ProductCard = ({ product, addToCart = true }) => {
         </Grid>
       </CardActions>
     </Card>
+  ) : (
+    <Box
+      sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
+    >
+      <CircularProgress />
+    </Box>
   );
 };
 

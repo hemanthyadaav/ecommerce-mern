@@ -31,7 +31,7 @@ const Home = () => {
   return !loading ? (
     <Grid
       container
-      spacing={3}
+      // spacing={0.5}
       sx={{
         display: "flex",
         flexDirection: "row",
@@ -41,7 +41,7 @@ const Home = () => {
     >
       {products.map((product, index) => {
         return (
-          <Grid item key={index} md={3} sx={{ ml: { md: 2 } }}>
+          <Grid item key={index} md={3} sx={{ ml: { md: 2 }, my: 2 }}>
             <ProductCard product={product} addToCart={true} />
           </Grid>
         );
