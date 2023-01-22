@@ -16,10 +16,10 @@ const ProductCard = ({ product, addToCart = true }) => {
   const buttonsizing = {
     width: "100%",
     py: 1,
-    minWidth: "200px",
+    // minWidth: "200px",
   };
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card sx={{ maxWidth: 345, width: { xs: 300 } }}>
       <CardActionArea>
         <CardMedia
           component="img"
