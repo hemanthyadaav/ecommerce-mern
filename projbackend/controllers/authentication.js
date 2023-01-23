@@ -20,7 +20,7 @@ exports.signup = (req, res) => {
     },
     (error, user) => {
       if (user) {
-        console.log(error)
+        console.log(error);
         return res.status(400).json({
           error: "User email exists!",
         });

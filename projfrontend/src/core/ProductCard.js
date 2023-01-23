@@ -14,11 +14,16 @@ import {
   Grid,
 } from "@mui/material";
 import Chip from "@mui/material/Chip";
-import { addItemToCart } from "./helper/CartHelper";
+import { addItemToCart, removeFromCart } from "./helper/CartHelper";
 import { ToastContainer, toast } from "react-toastify";
 import { CART } from "../links";
 
-const ProductCard = ({ product, addToCart = true }) => {
+const ProductCard = ({
+  product,
+  addToCart = true,
+  reload = undefined,
+  setReload = (f) => f,
+}) => {
   const [loading, setLoading] = React.useState(false);
   const navigate = useNavigate();
 
@@ -27,10 +32,10 @@ const ProductCard = ({ product, addToCart = true }) => {
     addItemToCart(product, () => {
       setTimeout(() => {
         return navigate(CART);
-      }, 3000);
+      }, 2000);
       setLoading(false);
-      return toast.success("Item added to Cart!", {
-        hideProgressBar: true,
+      return toast.success("Loading Cart....!", {
+        autoClose: 2000,
       });
     });
   };
@@ -124,7 +129,10 @@ const ProductCard = ({ product, addToCart = true }) => {
                 variant="outlined"
                 sx={buttonsizing}
                 disableElevation
-                onClick={() => {}}
+                onClick={() => {
+                  removeFromCart(product._id);
+                  setReload(!reload);
+                }}
               >
                 Remove from Cart
               </Button>
