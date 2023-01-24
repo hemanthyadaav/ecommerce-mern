@@ -35,7 +35,7 @@ const ProductCard = ({
       }, 2000);
       setLoading(false);
       return toast.success("Loading Cart....!", {
-        autoClose: 2000,
+        autoClose: 1500,
       });
     });
   };
