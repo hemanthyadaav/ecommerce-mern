@@ -1,14 +1,19 @@
-import { Box, Button, CircularProgress, Grid } from "@mui/material";
+import { Box, Button, CircularProgress, Grid, Typography } from "@mui/material";
 import React, { Fragment, useEffect, useState } from "react";
-import { Navigate, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import { ToastContainer } from "react-toastify";
 import { loadCart } from "./helper/CartHelper";
 import ProductCard from "./ProductCard";
+import { isAuthenticated } from "../auth/helper";
+import { PAYMENT } from "../links";
+import PaymentUI from "./PaymentUI";
 
 const Cart = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [reload, setReload] = useState(false);
+  const userId = isAuthenticated() && isAuthenticated().user._id;
+  const token = isAuthenticated() && isAuthenticated().user.token;
 
   const navigate = useNavigate();
   const getProducts = () => {
@@ -23,71 +28,82 @@ const Cart = () => {
 
   return !loading ? (
     <Fragment>
-      <Grid
-        container
-        flexDirection="column"
-        alignItems="center"
-        justifyContent="center"
-      >
+      {products && products.length > 0 ? (
         <Grid
           container
-          // md={8}
-          item
-          spacing={2}
+          flexDirection="column"
           alignItems="center"
           justifyContent="center"
-          sx={{ pl: { md: 6 } }}
         >
-          {products.map((product, index) => {
-            return (
-              <Grid item key={index} md={3} sx={{ my: 2 }}>
-                <ProductCard
-                  product={product}
-                  addToCart={false}
-                  reload={reload}
-                  setReload={setReload}
-                />
-              </Grid>
-            );
-          })}
+          <Grid
+            container
+            // md={8}
+            item
+            spacing={2}
+            alignItems="center"
+            justifyContent="center"
+            sx={{ pl: { md: 6 } }}
+          >
+            {products.map((product, index) => {
+              return (
+                <Grid item key={index} md={3} sx={{ my: 2 }}>
+                  <ProductCard
+                    product={product}
+                    addToCart={false}
+                    reload={reload}
+                    setReload={setReload}
+                  />
+                </Grid>
+              );
+            })}
 
-          <ToastContainer />
-        </Grid>
+            <ToastContainer />
+          </Grid>
+          <Grid item>
+            <Button
+              sx={{
+                mt: {
+                  md: 6,
+                  xs: 4,
+                },
+                color: "white",
+                //   position: "fixed",
+              }}
+              variant="contained"
+              disableElevation
+              onClick={() => {
+                return navigate(`${PAYMENT}/${userId}`);
+              }}
+            >
+              Proceed to Checkout
+            </Button>
+          </Grid>
 
-        <Grid item>
-          <Button
-            sx={{
-              mt: {
-                md: 6,
-                xs: 4,
-              },
+          <Grid item>
+            <Button
+              sx={{
+                mt: 2,
+                // color: "white",
+                //   position: "fixed",
+              }}
               // color: "white",
               //   position: "fixed",
-            }}
-            onClick={() => {
-              return navigate("/");
-            }}
-            variant="outlined"
-            disableElevation
-          >
-            Back to Home
-          </Button>
+              // }}
+              onClick={() => {
+                return navigate("/");
+              }}
+              variant="outlined"
+              disableElevation
+            >
+              Back to Home
+            </Button>
+          </Grid>
         </Grid>
-
-        <Grid item>
-          <Button
-            sx={{
-              mt: 2,
-              color: "white",
-              //   position: "fixed",
-            }}
-            variant="contained"
-            disableElevation
-          >
-            Proceed to Checkout
-          </Button>
-        </Grid>
-      </Grid>
+      ) : (
+        <Typography variant="h5" sx={{ textAlign: "center" }} color="secondary">
+          No Items inside Cart!
+        </Typography>
+      )}
     </Fragment>
   ) : (
     <Box

@@ -12,6 +12,7 @@ import Cart from "./core/Cart";
 import Footer from "./core/Footer";
 import Home from "./core/Home";
 import Navbar from "./core/Navbar";
+import PaymentUI from "./core/PaymentUI";
 import {
   CART,
   CCATEGORY,
@@ -19,6 +20,7 @@ import {
   HOME,
   MCATEGORY,
   MPRODUCT,
+  PAYMENTID,
   SIGNIN,
   SIGNUP,
   UCATEGORYID,
@@ -37,6 +39,14 @@ const MyRoutes = () => {
           element={
             <PrivateRoutes>
               <Home />
+            </PrivateRoutes>
+          }
+        />
+        <Route
+          path={PAYMENTID}
+          element={
+            <PrivateRoutes>
+              <PaymentUI />
             </PrivateRoutes>
           }
         />

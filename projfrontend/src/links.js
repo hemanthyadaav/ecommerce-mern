@@ -15,3 +15,5 @@ export const MORDERS = "/admin/orders";
 export const MPRODUCT = "/admin/products";
 export const UPRODUCT = "/admin/update/product";
 export const UPRODUCTID = "/admin/update/product/:id";
+export const PAYMENTID = "/payment/:userId";
+export const PAYMENT = "/payment";
